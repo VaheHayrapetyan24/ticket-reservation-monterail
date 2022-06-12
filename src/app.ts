@@ -34,10 +34,7 @@ export class App {
       routePrefix: config.apiPrefix,
       controllers,
       authorizationChecker: AuthorizationMiddleware.authorizationChecker,
-      middlewares: [
-        bodyParser.urlencoded({ extended: true }),
-        bodyParser.json(),
-      ],
+      middlewares: [bodyParser.urlencoded({ extended: true }), bodyParser.json()],
     });
 
     promises.push(createConnection(config.database));

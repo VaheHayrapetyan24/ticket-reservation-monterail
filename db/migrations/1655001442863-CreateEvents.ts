@@ -4,7 +4,7 @@ export class CreateEvents1655001442863 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'event',
+        name: 'events',
         columns: [
           {
             name: 'id',
@@ -26,12 +26,23 @@ export class CreateEvents1655001442863 implements MigrationInterface {
             name: 'date',
             type: 'timestamp',
           },
+          {
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updatedAt',
+            type: 'timestamp',
+            default: 'now()',
+            onUpdate: 'now()',
+          },
         ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('event');
+    await queryRunner.dropTable('events');
   }
 }

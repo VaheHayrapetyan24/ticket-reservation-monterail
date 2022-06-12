@@ -1,4 +1,4 @@
-import {BadRequestError} from "routing-controllers";
+import { BadRequestError } from 'routing-controllers';
 
 export class SeatsAreNotNextToEachOtherError extends BadRequestError {
   constructor() {

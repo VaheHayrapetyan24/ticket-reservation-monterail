@@ -1,6 +1,6 @@
-import { Inject, Service } from 'typedi';
+import { Service } from 'typedi';
 import { BaseEntityService } from '../base/baseEntity.service';
-import { DeepPartial, EntityManager, Repository, getRepository } from 'typeorm';
+import { DeepPartial, EntityManager, getRepository } from 'typeorm';
 import { Events } from './events.entity';
 import { EventNotFoundError } from './errors/eventNotFound.error';
 

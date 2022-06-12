@@ -1,3 +1,5 @@
+import eventConfiguration from '../../db/defaultData/venueConfiguration.json';
+
 /**
  * Mock for external service for storing configurations (E.g. Contentstack)
  *
@@ -45,7 +47,7 @@ export class VenueConfiguration {
   static async getConfigurationById(
     configurationId: string,
   ): Promise<IVenueConfiguration> {
-    if (configurationId !== exampleConfig.id) {
+    if (configurationId !== (eventConfiguration as IVenueConfiguration).id) {
       throw new ConfigurationNotFound();
     }
     return exampleConfig;

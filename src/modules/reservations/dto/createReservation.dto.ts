@@ -1,4 +1,4 @@
-import {ArrayMaxSize, ArrayMinSize, IsArray, IsInt, IsNotEmpty, IsString, Min, ValidateNested} from 'class-validator';
+import { ArrayMinSize, IsArray, IsInt, IsNotEmpty, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class SeatDto {
@@ -17,7 +17,6 @@ export class CreateReservationDto {
   @IsArray()
   @ValidateNested({ each: true })
   @ArrayMinSize(2)
-  @ArrayMaxSize(2)
   @Type(() => SeatDto)
   seats: SeatDto[];
 
@@ -31,8 +30,4 @@ export class CreateReservationDto {
   @Min(1)
   @IsNotEmpty()
   aisle: number;
-
-  @IsString()
-  @IsNotEmpty()
-  venueConfigurationId: string;
 }

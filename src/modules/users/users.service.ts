@@ -1,5 +1,5 @@
 import { Inject, Service } from 'typedi';
-import { DeepPartial, EntityManager, getRepository, Repository } from 'typeorm';
+import { DeepPartial, EntityManager, getRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { CryptoService } from './crypto.service';
 import { Users } from './users.entity';
@@ -18,6 +18,7 @@ export class UsersService extends BaseEntityService<Users> {
   constructor() {
     super();
     this.repository = getRepository(Users);
+    this.repositoryClass = Users;
   }
 
   public async signup(email: string, password: string): Promise<void> {
@@ -26,26 +27,18 @@ export class UsersService extends BaseEntityService<Users> {
       if (existingUser) {
         throw new UserWithEmailAlreadyExistsError(email);
       }
-      const passwordHash = await this.cryptoService.generatePasswordHash(
-        password,
-      );
+      const passwordHash = await this.cryptoService.generatePasswordHash(password);
       await this.create({ email, passwordHash }, manager);
     });
   }
 
-  public async login(
-    email: string,
-    password: string,
-  ): Promise<{ token: string }> {
+  public async login(email: string, password: string): Promise<{ token: string }> {
     const user = await this.findOneUnsafe({ email });
     this.checkPassword(password, user.passwordHash);
     return { token: this.signToken(user) };
   }
 
-  public async findOneSafe(
-    params: DeepPartial<Users>,
-    manager?: EntityManager,
-  ): Promise<Users> {
+  public async findOneSafe(params: DeepPartial<Users>, manager?: EntityManager): Promise<Users> {
     return this.getRepository(manager).findOne({ where: params });
   }
 
@@ -54,17 +47,10 @@ export class UsersService extends BaseEntityService<Users> {
   }
 
   private async create(user: DeepPartial<Users>, manager?: EntityManager) {
-    return this.getRepository(manager)
-      .createQueryBuilder()
-      .insert()
-      .values(user)
-      .execute();
+    return this.getRepository(manager).createQueryBuilder().insert().values(user).execute();
   }
 
-  private async findOneUnsafe(
-    params: DeepPartial<Users>,
-    manager?: EntityManager,
-  ): Promise<Users> {
+  private async findOneUnsafe(params: DeepPartial<Users>, manager?: EntityManager): Promise<Users> {
     const user = await this.findOneSafe(params, manager);
     if (!user) {
       throw new UserNotFoundError(params.email);
@@ -76,9 +62,5 @@ export class UsersService extends BaseEntityService<Users> {
     if (!this.cryptoService.arePasswordsEqual(password, passwordHash)) {
       throw new InvalidPasswordError();
     }
-  }
-
-  protected getRepository(manager?: EntityManager): Repository<Users> {
-    return manager?.getRepository(Users) || this.repository;
   }
 }

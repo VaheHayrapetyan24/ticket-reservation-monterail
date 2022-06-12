@@ -14,7 +14,7 @@ export class ReservationsController {
   @Post()
   @Authorized()
   public async create(@Body({ validate: true }) body: CreateReservationDto, @Req() req: Request): Promise<boolean> {
-    await this.reservationsService.create(body);
+    await this.reservationsService.create(body, req.user as Users);
     return true;
   }
 }

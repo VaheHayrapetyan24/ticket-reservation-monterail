@@ -1,8 +1,4 @@
-import {
-  Authorized,
-  Get,
-  JsonController,
-} from 'routing-controllers';
+import { Authorized, Get, JsonController } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { EventsService } from './events.service';
 

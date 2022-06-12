@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity()
+@Entity('events')
 export class Events {
   @PrimaryGeneratedColumn()
   id: number;
@@ -14,4 +14,10 @@ export class Events {
 
   @Column()
   date: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

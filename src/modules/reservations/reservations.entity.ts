@@ -5,6 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Events } from '../events/events.entity';
 import { Tickets } from '../tickets/tickets.entity';
@@ -17,13 +19,10 @@ export enum ReservationStatus {
   PAYMENT_SUCCESSFUL = 'PAYMENT_SUCCESSFUL',
 }
 
-@Entity()
+@Entity('reservations')
 export class Reservations {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  ticketCount: number;
 
   @Column()
   status: ReservationStatus;
@@ -44,4 +43,10 @@ export class Reservations {
 
   @OneToMany(() => Tickets, ticket => ticket.reservation)
   tickets: Tickets[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

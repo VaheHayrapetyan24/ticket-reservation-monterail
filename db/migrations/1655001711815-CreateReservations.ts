@@ -4,7 +4,7 @@ export class CreateReservations1655001711815 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'reservation',
+        name: 'reservations',
         columns: [
           {
             name: 'id',
@@ -12,10 +12,6 @@ export class CreateReservations1655001711815 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
-          },
-          {
-            name: 'ticketCount',
-            type: 'smallint',
           },
           {
             name: 'status',
@@ -38,6 +34,17 @@ export class CreateReservations1655001711815 implements MigrationInterface {
             name: 'userId',
             type: 'bigint',
           },
+          {
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updatedAt',
+            type: 'timestamp',
+            default: 'now()',
+            onUpdate: 'now()',
+          },
         ],
         foreignKeys: [
           {
@@ -58,6 +65,6 @@ export class CreateReservations1655001711815 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('reservation');
+    await queryRunner.dropTable('reservations');
   }
 }

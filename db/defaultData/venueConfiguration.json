@@ -1,0 +1,13 @@
+{
+  "id": "randomVenueId",
+  "aisles": [
+    {
+      "rowCount": 10,
+      "seatCount": 10
+    },
+    {
+      "rowCount": 20,
+      "seatCount": 20
+    }
+  ]
+}

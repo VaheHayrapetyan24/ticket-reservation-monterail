@@ -6,7 +6,7 @@
   "scripts": {
     "tsc:watch": "tsc -w",
     "tsc:build": "tsc",
-    "tsc:start": "tsc && node --inspect=0.0.0.0:19230 ./build/app.js",
+    "tsc:start": "tsc && node --inspect=0.0.0.0:19230 ./build/src/app.js",
     "tsc:check": "tsc --noEmit",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm --config src/config/database.ts",
     "migration:run": "npm run typeorm migration:run",
