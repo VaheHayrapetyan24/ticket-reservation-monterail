@@ -13,8 +13,7 @@ export class EventsService extends BaseEntityService<Events> {
   }
 
   public async getAll(): Promise<Events[]> {
-    const events = await this.getRepository().find();
-    return events;
+    return this.getRepository().find();
   }
 
   async findOneUnsafe(

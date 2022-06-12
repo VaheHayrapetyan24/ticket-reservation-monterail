@@ -8,7 +8,7 @@ import { TicketsService } from '../tickets/tickets.service';
 import config from '../../config';
 import { TicketsAlreadyReservedError } from '../tickets/errors/ticketsAlreadyReserved.error';
 import { Users } from '../users/users.entity';
-import { PaymentService } from '../../mocks/paymentService.mock';
+import { PaymentService } from '../../mocks/payment/paymentService.mock';
 
 @Service()
 export class ReservationsService extends BaseEntityService<Reservations> {
@@ -16,6 +16,8 @@ export class ReservationsService extends BaseEntityService<Reservations> {
   private eventsService: EventsService;
   @Inject()
   private ticketsService: TicketsService;
+  @Inject()
+  private paymentService: PaymentService;
 
   constructor() {
     super();
@@ -30,7 +32,7 @@ export class ReservationsService extends BaseEntityService<Reservations> {
       });
       const seatPositions = this.ticketsService.getUniqueSeatsPositions(reservationDto.seats);
       await this.validateReservation(reservationDto, seatPositions, event.venueConfigurationId, manager);
-      const invoiceId = await PaymentService.createInvoice();
+      const invoiceId = await this.paymentService.createInvoice();
       const insertResult = await this.getRepository(manager).insert({
         event,
         reservedAt: new Date().toString(),
@@ -57,7 +59,7 @@ export class ReservationsService extends BaseEntityService<Reservations> {
     await this.validateReservationAvailability(reservationDto, manager);
   }
 
-  async validateReservationAvailability(reservationDto: CreateReservationDto, manager?: EntityManager) {
+  async validateReservationAvailability(reservationDto: CreateReservationDto, manager?: EntityManager): Promise<void> {
     const seatPositions = this.ticketsService.getUniqueSeatsPositions(reservationDto.seats);
     const reservations = await this.getRepository(manager).find({
       relations: ['tickets'],
@@ -82,7 +84,11 @@ export class ReservationsService extends BaseEntityService<Reservations> {
     }
   }
 
-  getReservationStartDate() {
+  async updateStatus(invoiceId: string, status: ReservationStatus): Promise<void> {
+    await this.getRepository().update({ invoiceId }, { status });
+  }
+
+  getReservationStartDate(): Date {
     const now = new Date();
     return new Date(now.getTime() - config.reservationTimeout);
   }
