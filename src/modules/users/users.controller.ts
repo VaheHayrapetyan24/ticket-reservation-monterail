@@ -10,17 +10,13 @@ export class UsersController {
   private usersService: UsersService;
 
   @Post('/signup')
-  public async signup(
-    @Body({ validate: true }) body: SignupDto,
-  ): Promise<boolean> {
+  public async signup(@Body({ validate: true }) body: SignupDto): Promise<boolean> {
     await this.usersService.signup(body.email, body.password);
     return true;
   }
 
   @Post('/login')
-  public async login(
-    @Body({ validate: true }) body: SignupDto,
-  ): Promise<{ token: string }> {
+  public async login(@Body({ validate: true }) body: SignupDto): Promise<{ token: string }> {
     return this.usersService.login(body.email, body.password);
   }
 }
