@@ -6,9 +6,9 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { Event } from '../events/event.entity';
-import { Ticket } from '../tickets/ticket.entity';
-import { User } from '../users/users.entity';
+import { Events } from '../events/events.entity';
+import { Tickets } from '../tickets/tickets.entity';
+import { Users } from '../users/users.entity';
 
 export enum ReservationStatus {
   RESERVED = 'RESERVED',
@@ -18,7 +18,7 @@ export enum ReservationStatus {
 }
 
 @Entity()
-export class Reservation {
+export class Reservations {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,14 +34,14 @@ export class Reservation {
   @Column({ nullable: true })
   invoiceId: string;
 
-  @ManyToOne(() => Event)
+  @ManyToOne(() => Events)
   @JoinColumn()
-  event: Event;
+  event: Events;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => Users)
   @JoinColumn()
-  user: User;
+  user: Users;
 
-  @OneToMany(() => Ticket, ticket => ticket.reservation)
-  tickets: Ticket[];
+  @OneToMany(() => Tickets, ticket => ticket.reservation)
+  tickets: Tickets[];
 }

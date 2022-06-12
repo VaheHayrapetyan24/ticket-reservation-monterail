@@ -1,26 +1,26 @@
 import { Inject, Service } from 'typedi';
 import { BaseEntityService } from '../base/baseEntity.service';
 import { DeepPartial, EntityManager, Repository, getRepository } from 'typeorm';
-import { Event } from './event.entity';
+import { Events } from './events.entity';
 import { EventNotFoundError } from './errors/eventNotFound.error';
 
 @Service()
-export class EventsService extends BaseEntityService<Event> {
+export class EventsService extends BaseEntityService<Events> {
   constructor() {
     super();
-    this.repository = getRepository(Event);
-    this.repositoryClass = Event;
+    this.repository = getRepository(Events);
+    this.repositoryClass = Events;
   }
 
-  public async getAll(): Promise<Event[]> {
+  public async getAll(): Promise<Events[]> {
     const events = await this.getRepository().find();
     return events;
   }
 
-  private async findOneUnsafe(
-    params: DeepPartial<Event>,
+  async findOneUnsafe(
+    params: DeepPartial<Events>,
     manager?: EntityManager,
-  ): Promise<Event> {
+  ): Promise<Events> {
     const user = await this.findOneSafe(params, manager);
     if (!user) {
       throw new EventNotFoundError(params.id);

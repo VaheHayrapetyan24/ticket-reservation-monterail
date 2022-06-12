@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Event {
+export class Events {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   // id for fetching the ticket configuration for the venue
   @Column()

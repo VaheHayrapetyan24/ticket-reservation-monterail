@@ -2,7 +2,7 @@ import { Inject, Service } from 'typedi';
 import { DeepPartial, EntityManager, getRepository, Repository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { CryptoService } from './crypto.service';
-import { User } from './users.entity';
+import { Users } from './users.entity';
 import { UserWithEmailAlreadyExistsError } from './errors/userWithEmailAlreadyExists.error';
 import { UserNotFoundError } from './errors/userNotFound.error';
 import { InvalidPasswordError } from './errors/invalidPassword.error';
@@ -12,12 +12,12 @@ import config from '../../config';
 const { auth } = config;
 
 @Service()
-export class UsersService extends BaseEntityService<User> {
+export class UsersService extends BaseEntityService<Users> {
   @Inject()
   private cryptoService: CryptoService;
   constructor() {
     super();
-    this.repository = getRepository(User);
+    this.repository = getRepository(Users);
   }
 
   public async signup(email: string, password: string): Promise<void> {
@@ -43,17 +43,17 @@ export class UsersService extends BaseEntityService<User> {
   }
 
   public async findOneSafe(
-    params: DeepPartial<User>,
+    params: DeepPartial<Users>,
     manager?: EntityManager,
-  ): Promise<User> {
+  ): Promise<Users> {
     return this.getRepository(manager).findOne({ where: params });
   }
 
-  private signToken(user: User): string {
+  private signToken(user: Users): string {
     return 'Bearer ' + jwt.sign({ id: user.id }, auth.jwtSecret);
   }
 
-  private async create(user: DeepPartial<User>, manager?: EntityManager) {
+  private async create(user: DeepPartial<Users>, manager?: EntityManager) {
     return this.getRepository(manager)
       .createQueryBuilder()
       .insert()
@@ -62,9 +62,9 @@ export class UsersService extends BaseEntityService<User> {
   }
 
   private async findOneUnsafe(
-    params: DeepPartial<User>,
+    params: DeepPartial<Users>,
     manager?: EntityManager,
-  ): Promise<User> {
+  ): Promise<Users> {
     const user = await this.findOneSafe(params, manager);
     if (!user) {
       throw new UserNotFoundError(params.email);
@@ -78,7 +78,7 @@ export class UsersService extends BaseEntityService<User> {
     }
   }
 
-  protected getRepository(manager?: EntityManager): Repository<User> {
-    return manager?.getRepository(User) || this.repository;
+  protected getRepository(manager?: EntityManager): Repository<Users> {
+    return manager?.getRepository(Users) || this.repository;
   }
 }
