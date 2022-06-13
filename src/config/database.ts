@@ -4,11 +4,11 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 const ext = extname(__filename);
 export default {
   type: 'postgres',
-  host: process.env.DB_HOST || '172.18.0.2',
+  host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
-  username: process.env.DB_USERNAME || 'monterail',
-  database: process.env.DB_DATABASE_NAME || 'monterail',
-  password: process.env.DB_PASSWORD || 'password',
+  username: process.env.DB_USERNAME || 'postgres',
+  database: process.env.DB_DATABASE_NAME || 'postgres',
+  password: process.env.DB_PASSWORD || '',
   synchronize: false,
   migrations: [`db/migrations/*${ext}`],
   entities: [`**/*.entity${ext}`],

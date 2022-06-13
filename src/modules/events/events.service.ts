@@ -16,14 +16,11 @@ export class EventsService extends BaseEntityService<Events> {
     return this.getRepository().find();
   }
 
-  async findOneUnsafe(
-    params: DeepPartial<Events>,
-    manager?: EntityManager,
-  ): Promise<Events> {
-    const user = await this.findOneSafe(params, manager);
-    if (!user) {
+  async findOneUnsafe(params: DeepPartial<Events>, manager?: EntityManager): Promise<Events> {
+    const event = await this.findOneSafe(params, manager);
+    if (!event) {
       throw new EventNotFoundError(params.id);
     }
-    return user;
+    return event;
   }
 }

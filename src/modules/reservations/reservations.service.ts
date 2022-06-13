@@ -1,6 +1,6 @@
 import { Inject, Service } from 'typedi';
 import { BaseEntityService } from '../base/baseEntity.service';
-import { EntityManager, getRepository, In, MoreThan } from 'typeorm';
+import { DeepPartial, EntityManager, getRepository, In, MoreThan } from 'typeorm';
 import { Reservations, ReservationStatus } from './reservations.entity';
 import { EventsService } from '../events/events.service';
 import { CreateReservationDto } from './dto/createReservation.dto';
@@ -9,6 +9,9 @@ import config from '../../config';
 import { TicketsAlreadyReservedError } from '../tickets/errors/ticketsAlreadyReserved.error';
 import { Users } from '../users/users.entity';
 import { PaymentService } from '../../mocks/payment/paymentService.mock';
+import { Events } from '../events/events.entity';
+import { EventNotFoundError } from '../events/errors/eventNotFound.error';
+import { ReservationNotFoundError } from './errors/reservationNotFound.error';
 
 @Service()
 export class ReservationsService extends BaseEntityService<Reservations> {
@@ -82,6 +85,28 @@ export class ReservationsService extends BaseEntityService<Reservations> {
     if (reservations.length) {
       throw new TicketsAlreadyReservedError(reservedTicketIds);
     }
+  }
+
+  async getReservationsOfUser(user: Users, manager?: EntityManager): Promise<Reservations[]> {
+    return this.getRepository(manager).find({
+      where: {
+        user,
+      },
+    });
+  }
+
+  async getReservationById(reservationId: number, user: Users, manager?: EntityManager): Promise<Reservations> {
+    const reservation = await this.getRepository(manager).findOne({
+      relations: ['tickets'],
+      where: {
+        user,
+        id: reservationId,
+      },
+    });
+    if (!reservation) {
+      throw new ReservationNotFoundError(reservationId);
+    }
+    return reservation;
   }
 
   async updateStatus(invoiceId: string, status: ReservationStatus): Promise<void> {

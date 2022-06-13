@@ -20,8 +20,8 @@ export class Tickets {
   aisle: number;
 
   // row_seat position of the ticket
-  // helps us do position IN queries
-  // instead of doing multiple row = .. AND seat = .. OR row = .. AND seat = ..
+  // helps us do "position IN (...)" queries
+  // instead of doing multiple "row = .. AND seat = .. OR row = .. AND seat = .."
   @Column()
   position: string;
 

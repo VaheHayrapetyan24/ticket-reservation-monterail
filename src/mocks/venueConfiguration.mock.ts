@@ -44,9 +44,7 @@ export class ConfigurationNotFound extends Error {}
 
 export class VenueConfiguration {
   // if the actual implementation made a request to an external service we could cache the result
-  static async getConfigurationById(
-    configurationId: string,
-  ): Promise<IVenueConfiguration> {
+  static async getConfigurationById(configurationId: string): Promise<IVenueConfiguration> {
     if (configurationId !== (eventConfiguration as IVenueConfiguration).id) {
       throw new ConfigurationNotFound();
     }

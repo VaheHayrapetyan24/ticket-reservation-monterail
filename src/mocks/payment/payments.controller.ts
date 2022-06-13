@@ -10,7 +10,7 @@ export class PaymentsController {
   private paymentService: PaymentService;
 
   @Post('/webhook') // this is an update, but the webhooks are usually done with post
-  @Authorized() // using auth middleware here
+  @Authorized() // using auth middleware here just to have some kind of auth on payment webhook
   async webhook(@Body({ validate: true }) body: WebhookDto) {
     await this.paymentService.webhook(body);
     return true;
